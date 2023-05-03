@@ -1,0 +1,36 @@
+print('Welcom to the Money Bag tTransport Calculator (M.B.T.C)')
+print('-------------------------------------------------------')
+
+bigBagv_ = 80
+medBagv_ = 50
+smalBagv_ = 20
+med_bag_amount = 0
+small_bag_amount = 0
+
+Truckvolume = int(input('What is the volume of the truck (>= 100L): '))
+
+while Truckvolume <= 99:
+    Truckvolume = int(input('What is the volume of the truck (>= 100L): '))
+
+while Truckvolume >= 79:
+    big_bag_amount = Truckvolume // 80
+    spaceLeft = Truckvolume % 80
+    Truckvolume = spaceLeft
+while Truckvolume >= 49:
+    med_bag_amount = Truckvolume // 50
+    spaceLeft = Truckvolume % 50
+    Truckvolume = spaceLeft
+while Truckvolume >= 19:
+    small_bag_amount = Truckvolume // 20
+    spaceLeft = Truckvolume % 20
+    Truckvolume = spaceLeft
+
+print('Packing plan')
+print('------------')
+print(big_bag_amount, 'big bags')
+print(med_bag_amount, 'medium bags')
+print(small_bag_amount, 'small bags')
+print('space left : ', spaceLeft, 'L')
+totalvalue = (60000 * big_bag_amount)+(30000*med_bag_amount)+(10000*small_bag_amount)
+print('Total value:', totalvalue, end=(''))
+print('Kr')
