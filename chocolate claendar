@@ -1,0 +1,57 @@
+import java.util.Scanner;
+import java.util.Random;
+
+
+public class Main {
+    public static void main(String[] args) {
+        Main myApp = new Main();
+        ChocolatePiece[] chocolatePieces = myApp.storeChocolateObjects();
+        myApp.openCalendar(chocolatePieces);
+    }
+
+
+    public ChocolatePiece[] storeChocolateObjects() {
+        String[] shape = {"star", "Santa", "tree"};
+        int[] weight = {7, 8, 6};
+        ChocolatePiece[] chocolatePieces = new ChocolatePiece[24];
+        Random gen = new Random();
+
+        for (int i = 0; i < 24; i++) {
+            int randomNum = gen.nextInt(3);
+            ChocolatePiece chocolatePiece = new ChocolatePiece(shape[randomNum], weight[randomNum]);
+            chocolatePieces[i] = chocolatePiece;
+        }
+        return chocolatePieces;
+    }
+
+
+    public void openCalendar(ChocolatePiece[] chocolates) {
+        Scanner input = new Scanner(System.in);
+        int date;
+        int notEatenChocos= 24;
+
+        while (notEatenChocos > 0) {
+            do {
+                System.out.print("Choose window: ");
+                date = Integer.parseInt(input.nextLine());
+
+                if (date < 1 || date > 24) {
+                    System.out.println("Window is out of range");
+                }
+            }
+            while (date < 1 || date > 24);
+
+            // if is in the boundaries
+            ChocolatePiece chocolate = chocolates[date-1];
+            if (chocolate.isEaten()) System.out.println("Chocolate piece is eaten");
+            else // if choco is not eaten...
+            {
+                System.out.printf("%s, %d%n", chocolates[date-1].getShape(), chocolates[date-1].getWeight());
+                chocolate.setEaten(true); // make the eaten property true
+                notEatenChocos--;
+            }
+        }
+    }
+
+
+}
