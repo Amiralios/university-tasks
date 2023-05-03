@@ -1,0 +1,92 @@
+import sys
+import pickle
+
+# user menu
+
+
+def display_menu():
+    print('1. Add file')
+    print('2. Calculate')
+
+
+def cross_reference(files):
+    list_phone_num = []
+    for i in files:
+        infile = open(i, 'r')
+        read_file = infile.read()
+        num_list = set(read_file.splitlines())
+        list_phone_num.append(num_list)
+        infile.close
+    common_numbers_final = set()
+    sik = len(list_phone_num)
+    while sik > 1:
+        if sik == len(list_phone_num):
+            common_numbers = set(list_phone_num[sik-1].intersection(list_phone_num[sik-2]))
+            common_numbers_final.update(common_numbers)
+        elif sik < len(list_phone_num):
+            common_numbers_final = list_phone_num[sik-2].intersection(common_numbers_final)
+        sik = sik-1
+    return common_numbers_final
+
+
+# matching a num list
+
+def map_numbers_to_names(numbers, filename):
+    owner_file = open(filename, 'rb')
+    owner_names = pickle.load(owner_file)
+    suspected_owners = []
+    for i in numbers:
+        if i in owner_names:
+            part_owner = owner_names[i]
+            suspected_owners.append(part_owner)
+        elif i not in owner_names:
+            part_owner = owner_names.get(i, 'Unknown')
+            to_add = f'Unknown ({i})'
+            suspected_owners.append(to_add)
+    return suspected_owners
+
+
+def display_suspects(names):
+    print('The following persons was present on all crime scenes:')
+    print('------------------------------------------------------')
+    if names != []:
+        for i in names:
+            print(i)
+    elif names == []:
+        print('No matches')
+
+
+def main():
+    try:
+        filename = sys.argv[1]
+        display_menu()
+        file_for_phone_num = []
+        choice = int(input('Enter your choice: '))
+
+        #  adding file path to list
+        while choice == 1:
+            file_path = input('Enter a filename(include full path): ')
+            file_for_phone_num.append(file_path)
+            display_menu()
+            choice = int(input('Enter your choice: '))
+
+        # calculate suspected owners
+        if choice == 2 and len(file_for_phone_num) != 0:
+            return_A = cross_reference(file_for_phone_num)
+            return_B = map_numbers_to_names(return_A, filename)
+            display_suspects(return_B)
+        elif choice == 2 and len(file_for_phone_num) == 0:
+            print('Error: There was a problem with at least one of the files.')
+
+    except FileNotFoundError:
+        print('Error: There was a problem with at least one of the files.')
+    except IndexError:
+        print('Please enter the file argument')
+    except AssertionError as err:
+        print(err)
+    except TypeError:
+        print('Invalid type')
+
+
+if __name__ == '__main__':
+    main()
